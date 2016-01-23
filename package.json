@@ -1,0 +1,12 @@
+{
+  "name": "snappyjs",
+  "version": "0.1.0",
+  "description": "JavaScript implementation of Google's Snappy compression library",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Zhipeng Jia",
+  "license": "MIT",
+  "dependencies": {}
+}
