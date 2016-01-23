@@ -4,9 +4,13 @@
   "description": "JavaScript implementation of Google's Snappy compression library",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tap test.js"
   },
   "author": "Zhipeng Jia",
   "license": "MIT",
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "snappy": "~4.1.1",
+    "tap": "~5.1.1"
+  }
 }
