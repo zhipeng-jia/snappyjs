@@ -22,13 +22,13 @@
 
 'use strict'
 
-const BLOCK_LOG = 16
-const BLOCK_SIZE = 1 << BLOCK_LOG
+var BLOCK_LOG = 16
+var BLOCK_SIZE = 1 << BLOCK_LOG
 
-const HASH_TABLE_BITS = 14
-const HASH_TABLE_SIZE = 1 << HASH_TABLE_BITS
+var HASH_TABLE_BITS = 14
+var HASH_TABLE_SIZE = 1 << HASH_TABLE_BITS
 
-const HASH_FUNC_SHIFT = 32 - HASH_TABLE_BITS
+var HASH_FUNC_SHIFT = 32 - HASH_TABLE_BITS
 
 function hashFunc (key) {
   var h = key * 0x1e35a7bd
@@ -97,7 +97,10 @@ function emitCopy (output, op, offset, len) {
 }
 
 function compressFragment (input, ip, input_size, output, op, hash_table) {
-  hash_table.fill(0)
+  var i
+  for (i = 0; i < hash_table.length; i++) {
+    hash_table[i] = 0
+  }
 
   var ip_end = ip + input_size
   var ip_limit
@@ -111,7 +114,7 @@ function compressFragment (input, ip, input_size, output, op, hash_table) {
   var prev_hash, cur_hash
   var flag = true
 
-  const INPUT_MARGIN = 15
+  var INPUT_MARGIN = 15
   if (input_size >= INPUT_MARGIN) {
     ip_limit = ip_end - INPUT_MARGIN
 
