@@ -111,7 +111,7 @@ function compressFragment (input, ip, input_size, output, op, hash_table) {
   var prev_hash, cur_hash
   var flag = true
 
-  const INPUT_MARGIN = 15
+  var INPUT_MARGIN = 15
   if (input_size >= INPUT_MARGIN) {
     ip_limit = ip_end - INPUT_MARGIN
 
