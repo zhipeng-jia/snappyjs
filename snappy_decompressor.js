@@ -22,7 +22,7 @@
 
 'use strict'
 
-const WORD_MASK = [0, 0xff, 0xffff, 0xffffff, 0xffffffff]
+var WORD_MASK = [0, 0xff, 0xffff, 0xffffff, 0xffffffff]
 
 function copyBytes (from_array, from_pos, to_array, to_pos, length) {
   var i
