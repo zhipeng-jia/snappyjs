@@ -22,13 +22,13 @@
 
 'use strict'
 
-var BLOCK_LOG = 16
-var BLOCK_SIZE = 1 << BLOCK_LOG
+const BLOCK_LOG = 16
+const BLOCK_SIZE = 1 << BLOCK_LOG
 
-var HASH_TABLE_BITS = 14
-var HASH_TABLE_SIZE = 1 << HASH_TABLE_BITS
+const HASH_TABLE_BITS = 14
+const HASH_TABLE_SIZE = 1 << HASH_TABLE_BITS
 
-var HASH_FUNC_SHIFT = 32 - HASH_TABLE_BITS
+const HASH_FUNC_SHIFT = 32 - HASH_TABLE_BITS
 
 function hashFunc (key) {
   var h = key * 0x1e35a7bd
@@ -111,7 +111,7 @@ function compressFragment (input, ip, input_size, output, op, hash_table) {
   var prev_hash, cur_hash
   var flag = true
 
-  var INPUT_MARGIN = 15
+  const INPUT_MARGIN = 15
   if (input_size >= INPUT_MARGIN) {
     ip_limit = ip_end - INPUT_MARGIN
 
