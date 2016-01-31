@@ -32,6 +32,16 @@ function stringToArrayBuffer (source) {
   return array_buffer
 }
 
+function arrayBufferToString (array_buffer) {
+  var result = ''
+  var view = new Uint16Array(array_buffer)
+  var i
+  for (i = 0; i < view.length; i++) {
+    result += String.fromCharCode(view[i])
+  }
+  return result
+}
+
 var file_input = document.getElementById('input')
 var output = document.getElementById('output')
 
@@ -42,8 +52,14 @@ file_input.addEventListener('change', function (e) {
     var text = reader.result
     var text_buffer = stringToArrayBuffer(text)
     var compressed = SnappyJS.compress(text_buffer)
-    output.innerHTML = 'Original byte size: ' + text_buffer.byteLength + '<br>' +
-                       'Compressed byte size: ' + compressed.byteLength
+    var uncompressed = SnappyJS.uncompress(compressed)
+    var uncompressed_string = arrayBufferToString(uncompressed)
+    if (uncompressed_string === text) {
+      output.innerHTML = 'Original byte size: ' + text_buffer.byteLength + '<br>' +
+                         'Compressed byte size: ' + compressed.byteLength
+    } else {
+      alert('Test failed!')
+    }
   }
   reader.readAsText(file)
 })
