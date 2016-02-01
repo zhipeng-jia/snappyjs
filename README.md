@@ -1,7 +1,7 @@
 # SnappyJS [![Travis CI status](https://travis-ci.org/zhipeng-jia/snappyjs.svg?branch=master)](https://travis-ci.org/zhipeng-jia/snappyjs)
 A pure JavaScript implementation of Google's [Snappy](https://github.com/google/snappy) compression library.
 
-This implementation is reasonablely fast. It takes advantage of `ArrayBuffer`.
+This implementation is reasonably fast. It takes advantage of `ArrayBuffer`.
 
 ## Usage
 
