@@ -64,7 +64,7 @@ function emitLiteral (input, ip, len, output, op) {
   } else {
     output[op] = 61 << 2
     output[op + 1] = (len - 1) & 0xff
-    output[op + 2] = (len - 1) >> 8
+    output[op + 2] = (len - 1) >>> 8
     op += 3
   }
   copyBytes(input, ip, output, op, len)
@@ -73,13 +73,13 @@ function emitLiteral (input, ip, len, output, op) {
 
 function emitCopyLessThan64 (output, op, offset, len) {
   if (len < 12 && offset < 2048) {
-    output[op] = 1 + ((len - 4) << 2) + ((offset >> 8) << 5)
+    output[op] = 1 + ((len - 4) << 2) + ((offset >>> 8) << 5)
     output[op + 1] = offset & 0xff
     return op + 2
   } else {
     output[op] = 2 + ((len - 1) << 2)
     output[op + 1] = offset & 0xff
-    output[op + 2] = offset >> 8
+    output[op + 2] = offset >>> 8
     return op + 3
   }
 }
@@ -186,7 +186,7 @@ function compressFragment (input, ip, input_size, output, op, hash_table) {
 function putVarint (value, output, op) {
   do {
     output[op] = value & 0x7f
-    value = value >> 7
+    value = value >>> 7
     if (value > 0) {
       output[op] += 0x80
     }

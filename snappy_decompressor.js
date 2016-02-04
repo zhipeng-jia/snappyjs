@@ -51,7 +51,7 @@ SnappyDecompressor.prototype.readUncompressedLength = function () {
     c = this.array[this.pos]
     this.pos += 1
     val = c & 0x7f
-    if (((val << shift) >> shift) !== val) {
+    if (((val << shift) >>> shift) !== val) {
       return -1
     }
     result |= val << shift
@@ -79,7 +79,7 @@ SnappyDecompressor.prototype.uncompressToBuffer = function (out_buffer) {
     pos += 1
     if ((c & 0x3) === 0) {
       // Literal
-      len = (c >> 2) + 1
+      len = (c >>> 2) + 1
       if (len > 60) {
         if (pos + 3 >= array_length) {
           return false
@@ -98,15 +98,15 @@ SnappyDecompressor.prototype.uncompressToBuffer = function (out_buffer) {
     } else {
       switch (c & 0x3) {
         case 1:
-          len = ((c >> 2) & 0x7) + 4
-          offset = array[pos] + ((c >> 5) << 8)
+          len = ((c >>> 2) & 0x7) + 4
+          offset = array[pos] + ((c >>> 5) << 8)
           pos += 1
           break
         case 2:
           if (pos + 1 >= array_length) {
             return false
           }
-          len = (c >> 2) + 1
+          len = (c >>> 2) + 1
           offset = array[pos] + (array[pos + 1] << 8)
           pos += 2
           break
@@ -114,7 +114,7 @@ SnappyDecompressor.prototype.uncompressToBuffer = function (out_buffer) {
           if (pos + 3 >= array_length) {
             return false
           }
-          len = (c >> 2) + 1
+          len = (c >>> 2) + 1
           offset = array[pos] + (array[pos + 1] << 8) + (array[pos + 2] << 16) + (array[pos + 3] << 24)
           pos += 4
           break
