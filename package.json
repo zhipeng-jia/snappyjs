@@ -20,5 +20,8 @@
     "snappy": "~4.1.1",
     "tap": "~5.1.1",
     "uglifyify": "~3.0.1"
-  }
+  },
+  "keywords": [
+    "snappy"
+  ]
 }

@@ -22,5 +22,8 @@
     "index.js",
     "snappy_compressor.js",
     "snappy_decompressor.js"
+  ],
+  "keywords": [
+    "snappy"
   ]
 }
