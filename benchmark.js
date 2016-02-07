@@ -82,7 +82,7 @@ function runBenchmark () {
   }).add('snappyjs#compress', function () {
     snappyjs.compress(data.uncompressedArrayBuffer)
   }).add('node-snappy#uncompress', function () {
-    snappy.uncompressSync(data.comprssedBuffer)
+    snappy.uncompressSync(data.compressedBuffer)
   }).add('snappyjs#uncompress', function () {
     snappyjs.uncompress(data.compressedArrayBuffer)
   })
