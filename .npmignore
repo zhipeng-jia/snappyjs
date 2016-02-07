@@ -1,0 +1,6 @@
+dist
+.travis.yml
+browser_support.js
+build_browser_version.js
+benchmark.js
+test.js
