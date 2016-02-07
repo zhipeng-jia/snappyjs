@@ -3,6 +3,12 @@ A pure JavaScript implementation of Google's [Snappy](https://github.com/google/
 
 This implementation is reasonably fast (see benchmark below). It takes advantage of `ArrayBuffer`.
 
+## Install
+
+~~~
+npm install snappyjs
+~~~
+
 ## Usage
 
 SnappyJS works with NodeJS 4.x or later.
