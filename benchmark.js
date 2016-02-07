@@ -48,6 +48,16 @@ function bufferToArrayBuffer (buffer) {
   return array_buffer
 }
 
+function arrayBufferToBuffer (array_buffer) {
+  var view = new Uint8Array(array_buffer)
+  var buffer = new Buffer(view.length)
+  var i
+  for (i = 0; i < view.length; i++) {
+    buffer[i] = view[i]
+  }
+  return buffer
+}
+
 function randomString (length) {
   var result = ''
   var i, code
@@ -60,7 +70,7 @@ function randomString (length) {
 
 function prepareData (target, text) {
   var uncompressed_array_buffer = stringToArrayBuffer(text)
-  var uncompressed_buffer = new Buffer(uncompressed_array_buffer)
+  var uncompressed_buffer = arrayBufferToBuffer(uncompressed_array_buffer)
   var compressed_buffer = snappy.compressSync(uncompressed_buffer)
   var compressed_array_buffer = bufferToArrayBuffer(compressed_buffer)
   target.uncompressedArrayBuffer = uncompressed_array_buffer

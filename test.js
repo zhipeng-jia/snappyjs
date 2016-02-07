@@ -41,7 +41,13 @@ function bufferToArrayBuffer (buffer) {
 }
 
 function arrayBufferToBuffer (array_buffer) {
-  return new Buffer(array_buffer)
+  var view = new Uint8Array(array_buffer)
+  var buffer = new Buffer(view.length)
+  var i
+  for (i = 0; i < view.length; i++) {
+    buffer[i] = view[i]
+  }
+  return buffer
 }
 
 function stringToArrayBuffer (source) {
