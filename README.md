@@ -17,7 +17,7 @@ bower install snappyjs
 
 ## Usage
 
-SnappyJS works with NodeJS 4.x or later.
+SnappyJS works with NodeJS 0.10 or later.
 ~~~javascript
 var SnappyJS = require('snappyjs')
 var buffer = new ArrayBuffer(100)
