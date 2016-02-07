@@ -4,9 +4,6 @@
   "description": "JavaScript implementation of Google's Snappy compression library",
   "repository": "zhipeng-jia/snappyjs",
   "main": "index.js",
-  "engines": {
-    "node": ">=4"
-  },
   "scripts": {
     "test": "tap test.js"
   },
