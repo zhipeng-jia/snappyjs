@@ -33,6 +33,8 @@ Thus well-crafted JavaScript code can have competitive performance even compared
 
 I benchmark SnappyJS against `node-snappy` (which is NodeJS binding of native implementation).
 
+Command for benchmark is `node benchmark`. Below is the result running on NodeJS v5.5.0.
+
 ~~~
 Real text #1 (length 618425, byte length 1236850):
 node-snappy#compress x 170 ops/sec ±0.96% (74 runs sampled)
