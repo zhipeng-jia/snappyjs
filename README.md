@@ -5,8 +5,14 @@ This implementation is reasonably fast (see benchmark below). It takes advantage
 
 ## Install
 
+If using with NodeJS,
 ~~~
 npm install snappyjs
+~~~
+
+If using with Bower,
+~~~
+bower install snappyjs
 ~~~
 
 ## Usage
