@@ -4,7 +4,9 @@
   "description": "JavaScript implementation of Google's Snappy compression library",
   "repository": "zhipeng-jia/snappyjs",
   "main": "index.js",
-  "engines": { "node": ">=4" },
+  "engines": {
+    "node": ">=4"
+  },
   "scripts": {
     "test": "tap test.js"
   },
@@ -12,8 +14,12 @@
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
+    "benchmark": "~2.1.0",
+    "bluebird": "~3.2.2",
     "browserify": "~13.0.0",
     "licensify": "~2.1.0",
+    "microtime": "~2.0.0",
+    "request-promise": "~2.0.0",
     "snappy": "~4.1.1",
     "tap": "~5.1.1",
     "uglifyify": "~3.0.1"
