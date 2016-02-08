@@ -5,7 +5,7 @@ This implementation is reasonably fast (see benchmark below). It takes advantage
 
 ## Install
 
-If using with NodeJS,
+If using with Node.js,
 ~~~
 npm install snappyjs
 ~~~
@@ -17,7 +17,7 @@ bower install snappyjs
 
 ## Usage
 
-SnappyJS works with NodeJS 0.10 or later.
+SnappyJS works with Node.js 0.10 or later.
 ~~~javascript
 var SnappyJS = require('snappyjs')
 var buffer = new ArrayBuffer(100)
@@ -44,9 +44,9 @@ Uncompress `compressed`, which must be type of `ArrayBuffer`. Uncompressed byte 
 Although JavaScript is dynamic-typing, all major JS engines are highly optimized.
 Thus well-crafted JavaScript code can have competitive performance even compared to native C++ code.
 
-I benchmark SnappyJS against `node-snappy` (which is NodeJS binding of native implementation).
+I benchmark SnappyJS against `node-snappy` (which is Node.js binding of native implementation).
 
-Command for benchmark is `node benchmark`. Below is the result running on NodeJS v5.5.0.
+Command for benchmark is `node benchmark`. Below is the result running on Node.js v5.5.0.
 
 ~~~
 Real text #1 (length 618425, byte length 1236850):
