@@ -22,7 +22,7 @@
 
 'use strict'
 
-function arrayBufferEquals(buffer1, buffer2) {
+function arrayBufferEquals (buffer1, buffer2) {
   if (buffer1.byteLength !== buffer2.byteLength) {
     return false
   }
