@@ -5,7 +5,7 @@
   "repository": "zhipeng-jia/snappyjs",
   "main": "index.js",
   "scripts": {
-    "test": "tap test.js"
+    "test": "standard && tap test.js"
   },
   "author": "Zhipeng Jia",
   "license": "MIT",
@@ -18,10 +18,23 @@
     "microtime": "~2.0.0",
     "request-promise": "~2.0.0",
     "snappy": "~4.1.1",
+    "standard": "~6.0.4",
     "tap": "~5.1.1",
     "uglifyify": "~3.0.1"
   },
   "keywords": [
     "snappy"
-  ]
+  ],
+  "standard": {
+    "ignore": [
+      "/dist/snappyjs.js",
+      "/dist/snappyjs.min.js"
+    ],
+    "globals": [
+      "FileReader",
+      "alert",
+      "Benchmark",
+      "SnappyJS"
+    ]
+  }
 }

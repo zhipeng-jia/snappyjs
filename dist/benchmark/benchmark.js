@@ -46,7 +46,7 @@ file_input.addEventListener('change', function (e) {
     var compressed = SnappyJS.compress(text_buffer)
     output.innerHTML += 'Compressed byte size: ' + compressed.byteLength + '<br>'
 
-    var suite = new Benchmark.Suite
+    var suite = new Benchmark.Suite()
     suite.add('SnappyJS#compress', function () {
       SnappyJS.compress(text_buffer)
     }).add('SnappyJS#uncompress', function () {
