@@ -28,36 +28,6 @@ var Benchmark = require('benchmark')
 var Promise = require('bluebird')
 var rp = require('request-promise')
 
-function stringToArrayBuffer (source) {
-  var array_buffer = new ArrayBuffer(source.length * 2)
-  var view = new Uint16Array(array_buffer)
-  var i
-  for (i = 0; i < source.length; i++) {
-    view[i] = source.charCodeAt(i)
-  }
-  return array_buffer
-}
-
-function bufferToArrayBuffer (buffer) {
-  var array_buffer = new ArrayBuffer(buffer.length)
-  var view = new Uint8Array(array_buffer)
-  var i
-  for (i = 0; i < buffer.length; i++) {
-    view[i] = buffer[i]
-  }
-  return array_buffer
-}
-
-function arrayBufferToBuffer (array_buffer) {
-  var view = new Uint8Array(array_buffer)
-  var buffer = new Buffer(view.length)
-  var i
-  for (i = 0; i < view.length; i++) {
-    buffer[i] = view[i]
-  }
-  return buffer
-}
-
 function randomString (length) {
   var result = ''
   var i, code
@@ -69,13 +39,9 @@ function randomString (length) {
 }
 
 function prepareData (target, text) {
-  var uncompressed_array_buffer = stringToArrayBuffer(text)
-  var uncompressed_buffer = arrayBufferToBuffer(uncompressed_array_buffer)
+  var uncompressed_buffer = new Buffer(text)
   var compressed_buffer = snappy.compressSync(uncompressed_buffer)
-  var compressed_array_buffer = bufferToArrayBuffer(compressed_buffer)
-  target.uncompressedArrayBuffer = uncompressed_array_buffer
-  target.uncomprssedBuffer = uncompressed_buffer
-  target.compressedArrayBuffer = compressed_array_buffer
+  target.uncompressedBuffer = uncompressed_buffer
   target.compressedBuffer = compressed_buffer
 }
 
@@ -88,30 +54,65 @@ function runBenchmark () {
     console.log(String(event.target))
   })
   suite.add('node-snappy#compress', function () {
-    snappy.compressSync(data.uncomprssedBuffer)
+    var i
+    if (data.repeatedTimes) {
+      for (i = 0; i < data.repeatedTimes; i++) {
+        snappy.compressSync(data.uncompressedBuffer)
+      }
+    } else {
+      snappy.compressSync(data.uncompressedBuffer)
+    }
   }).add('snappyjs#compress', function () {
-    snappyjs.compress(data.uncompressedArrayBuffer)
+    var i
+    if (data.repeatedTimes) {
+      for (i = 0; i < data.repeatedTimes; i++) {
+        snappyjs.compress(data.uncompressedBuffer)
+      }
+    } else {
+      snappyjs.compress(data.uncompressedBuffer)
+    }
   }).add('node-snappy#uncompress', function () {
-    snappy.uncompressSync(data.compressedBuffer)
+    var i
+    if (data.repeatedTimes) {
+      for (i = 0; i < data.repeatedTimes; i++) {
+        snappy.uncompressSync(data.compressedBuffer)
+      }
+    } else {
+      snappy.uncompressSync(data.compressedBuffer)
+    }
   }).add('snappyjs#uncompress', function () {
-    snappyjs.uncompress(data.compressedArrayBuffer)
+    var i
+    if (data.repeatedTimes) {
+      for (i = 0; i < data.repeatedTimes; i++) {
+        snappyjs.uncompress(data.compressedBuffer)
+      }
+    } else {
+      snappyjs.uncompress(data.compressedBuffer)
+    }
   })
 
   data = {}
   prepareData(data, text1)
-  console.log(`Real text #1 (length ${text1.length}, byte length ${text1.length * 2}):`)
+  console.log(`Real text #1 (length ${text1.length}, byte length ${data.uncompressedBuffer.length}):`)
   suite.reset().run()
   console.log()
 
   data = {}
   prepareData(data, text2)
-  console.log(`Real text #2 (length ${text2.length}, byte length ${text2.length * 2}):`)
+  console.log(`Real text #2 (length ${text2.length}, byte length ${data.uncompressedBuffer.length}):`)
   suite.reset().run()
   console.log()
 
   data = {}
   prepareData(data, randomString(1000000))
-  console.log('Random string (length 1000000, byte length 2000000):')
+  console.log(`Random string (length 1000000, byte length ${data.uncompressedBuffer.length}):`)
+  suite.reset().run()
+  console.log()
+
+  data = {}
+  prepareData(data, randomString(100))
+  data.repeatedTimes = 10000
+  console.log(`Random string (length 100, byte length ${data.uncompressedBuffer.length}), repeated 10000 times:`)
   suite.reset().run()
   console.log()
 }
