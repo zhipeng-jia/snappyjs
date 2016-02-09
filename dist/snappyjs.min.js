@@ -5,7 +5,7 @@
  * snappyjs:
  *   license: MIT
  *   author: Zhipeng Jia
- *   version: 0.2.1
+ *   version: 0.3.1
  * 
  * base64-js:
  *   license: MIT
