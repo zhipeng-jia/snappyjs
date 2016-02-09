@@ -58,7 +58,7 @@ file_input.addEventListener('change', function (e) {
       output.innerHTML = 'Original byte size: ' + text_buffer.byteLength + '<br>' +
                          'Compressed byte size: ' + compressed.byteLength
     } else {
-      alert('Test failed!')
+      window.alert('Test failed!')
     }
   }
   reader.readAsText(file)

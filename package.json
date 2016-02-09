@@ -32,7 +32,6 @@
     ],
     "globals": [
       "FileReader",
-      "alert",
       "Benchmark",
       "SnappyJS"
     ]
