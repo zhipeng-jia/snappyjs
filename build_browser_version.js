@@ -29,12 +29,12 @@ var fs = require('fs')
 var dest, b
 
 dest = fs.createWriteStream('dist/snappyjs.js')
-b = browserify('browser_support.js')
+b = browserify('browser_support.js', { detectGlobals: false })
 b.plugin(licensify)
 b.bundle().pipe(dest)
 
 dest = fs.createWriteStream('dist/snappyjs.min.js')
-b = browserify('browser_support.js')
+b = browserify('browser_support.js', { detectGlobals: false })
 b.plugin(licensify)
 b.transform({}, 'uglifyify')
 b.bundle().pipe(dest)
