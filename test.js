@@ -129,6 +129,16 @@ test('compress() random string using ArrayBuffer', function (t) {
   t.end()
 })
 
+test('compress() random string using Buffer', function (t) {
+  var random_string = randomString(100000)
+  var compressed = snappyjs.compress(arrayBufferToBuffer(stringToArrayBuffer(random_string)))
+  t.equal(snappy.isValidCompressedSync(compressed), true)
+  var uncompressed = snappy.uncompressSync(compressed)
+  var uncompressed_string = arrayBufferToString(bufferToArrayBuffer(uncompressed))
+  t.equal(uncompressed_string, random_string)
+  t.end()
+})
+
 test('uncompress() random string using ArrayBuffer', function (t) {
   var random_string = randomString(100000)
   var compressed = snappy.compressSync(arrayBufferToBuffer(stringToArrayBuffer(random_string)))
@@ -136,6 +146,16 @@ test('uncompress() random string using ArrayBuffer', function (t) {
   compressed = bufferToArrayBuffer(compressed)
   var uncompressed = snappyjs.uncompress(compressed)
   var uncompressed_string = arrayBufferToString(uncompressed)
+  t.equal(uncompressed_string, random_string)
+  t.end()
+})
+
+test('uncompress() random string using Buffer', function (t) {
+  var random_string = randomString(100000)
+  var compressed = snappy.compressSync(arrayBufferToBuffer(stringToArrayBuffer(random_string)))
+  t.equal(snappy.isValidCompressedSync(compressed), true)
+  var uncompressed = snappyjs.uncompress(compressed)
+  var uncompressed_string = arrayBufferToString(bufferToArrayBuffer(uncompressed))
   t.equal(uncompressed_string, random_string)
   t.end()
 })
