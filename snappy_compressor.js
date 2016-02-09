@@ -30,9 +30,10 @@ var HASH_TABLE_SIZE = 1 << HASH_TABLE_BITS
 
 var HASH_FUNC_SHIFT = 32 - HASH_TABLE_BITS
 
+var hash_table = new Uint16Array(HASH_TABLE_SIZE)
+
 function hashFunc (key) {
-  var h = key * 0x1e35a7bd
-  return h >>> HASH_FUNC_SHIFT
+  return (key * 0x1e35a7bd) >>> HASH_FUNC_SHIFT
 }
 
 function load32 (array, pos) {
@@ -96,7 +97,7 @@ function emitCopy (output, op, offset, len) {
   return emitCopyLessThan64(output, op, offset, len)
 }
 
-function compressFragment (input, ip, input_size, output, op, hash_table) {
+function compressFragment (input, ip, input_size, output, op) {
   var i
   for (i = 0; i < hash_table.length; i++) {
     hash_table[i] = 0
@@ -197,7 +198,6 @@ function putVarint (value, output, op) {
 
 function SnappyCompressor (uncompressed) {
   this.array = uncompressed
-  this.hash_table = new Uint16Array(HASH_TABLE_SIZE)
 }
 
 SnappyCompressor.prototype.maxCompressedLength = function () {
@@ -211,13 +211,12 @@ SnappyCompressor.prototype.compressToBuffer = function (out_buffer) {
   var pos = 0
   var out_pos = 0
 
-  var hash_table = this.hash_table
   var fragment_size
 
   out_pos = putVarint(length, out_buffer, out_pos)
   while (pos < length) {
     fragment_size = Math.min(length - pos, BLOCK_SIZE)
-    out_pos = compressFragment(array, pos, fragment_size, out_buffer, out_pos, hash_table)
+    out_pos = compressFragment(array, pos, fragment_size, out_buffer, out_pos)
     pos += fragment_size
   }
 
