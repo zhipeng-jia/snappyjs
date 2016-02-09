@@ -78,7 +78,7 @@ snappyjs#uncompress x 12.95 ops/sec ±2.03% (36 runs sampled)
 
 From the result, we see that SnappyJS has 35%~40% performance of native implementation on uncompression,
 and 25%~40% performance on compression.
-If input size is smaller, SnappyJS may have better performance than `node-snappy`.
+If input size is small, SnappyJS may have better performance than `node-snappy`.
 It is because calling native function in JS is much more expensive than calling a JS function.
 
 ## License
