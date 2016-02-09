@@ -1,0 +1,10 @@
+{
+  "commitMessage": "Bump v%s",
+  "tagName": "v%s",
+  "scripts": {
+    "preupdate": "echo 'Bumping version'",
+    "precommit": "node build_browser_version && git add dist/*",
+    "postcommit": "git push && git push --tags && npm publish",
+    "postupdate": "echo 'Updated to version %s in manifest files'"
+  }
+}
