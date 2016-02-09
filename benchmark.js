@@ -93,26 +93,29 @@ function runBenchmark () {
 
   data = {}
   prepareData(data, text1)
-  console.log(`Real text #1 (length ${text1.length}, byte length ${data.uncompressedBuffer.length}):`)
+  data.repeatedTimes = 100
+  console.log(`Real text #1 (length ${text1.length}, byte length ${data.uncompressedBuffer.length}), repeated 100 times:`)
   suite.reset().run()
   console.log()
 
   data = {}
   prepareData(data, text2)
-  console.log(`Real text #2 (length ${text2.length}, byte length ${data.uncompressedBuffer.length}):`)
+  data.repeatedTimes = 10
+  console.log(`Real text #2 (length ${text2.length}, byte length ${data.uncompressedBuffer.length}), repeated 10 times:`)
   suite.reset().run()
   console.log()
 
   data = {}
   prepareData(data, randomString(1000000))
-  console.log(`Random string (length 1000000, byte length ${data.uncompressedBuffer.length}):`)
+  data.repeatedTimes = 50
+  console.log(`Random string (length 1000000, byte length ${data.uncompressedBuffer.length}), repeated 50 times:`)
   suite.reset().run()
   console.log()
 
   data = {}
   prepareData(data, randomString(100))
-  data.repeatedTimes = 10000
-  console.log(`Random string (length 100, byte length ${data.uncompressedBuffer.length}), repeated 10000 times:`)
+  data.repeatedTimes = 100000
+  console.log(`Random string (length 100, byte length ${data.uncompressedBuffer.length}), repeated 100000 times:`)
   suite.reset().run()
   console.log()
 }
