@@ -1,6 +1,6 @@
 {
   "name": "snappyjs",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "JavaScript implementation of Google's Snappy compression library",
   "repository": "zhipeng-jia/snappyjs",
   "main": "index.js",
