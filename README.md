@@ -52,34 +52,34 @@ Command for benchmark is `node benchmark`. Below is the result running on Node.j
 
 ~~~
 Real text #1 (length 618425, byte length 618425), repeated 100 times:
-node-snappy#compress x 2.21 ops/sec ±1.07% (10 runs sampled)
-snappyjs#compress x 0.86 ops/sec ±2.31% (7 runs sampled)
-node-snappy#uncompress x 7.02 ops/sec ±3.72% (21 runs sampled)
-snappyjs#uncompress x 2.38 ops/sec ±1.72% (10 runs sampled)
+node-snappy#compress x 2.31 ops/sec ±1.47% (10 runs sampled)
+snappyjs#compress x 0.91 ops/sec ±0.92% (7 runs sampled)
+node-snappy#uncompress x 7.22 ops/sec ±4.07% (22 runs sampled)
+snappyjs#uncompress x 2.45 ops/sec ±1.53% (11 runs sampled)
 
 Real text #2 (length 3844590, byte length 3844591), repeated 10 times:
-node-snappy#compress x 7.53 ops/sec ±2.66% (23 runs sampled)
-snappyjs#compress x 3.45 ops/sec ±1.06% (13 runs sampled)
-node-snappy#uncompress x 17.30 ops/sec ±3.83% (32 runs sampled)
-snappyjs#uncompress x 7.05 ops/sec ±3.24% (21 runs sampled)
+node-snappy#compress x 7.68 ops/sec ±2.78% (23 runs sampled)
+snappyjs#compress x 3.56 ops/sec ±1.44% (13 runs sampled)
+node-snappy#uncompress x 17.94 ops/sec ±4.71% (33 runs sampled)
+snappyjs#uncompress x 7.24 ops/sec ±2.57% (22 runs sampled)
 
-Random string (length 1000000, byte length 1500275), repeated 50 times:
-node-snappy#compress x 6.37 ops/sec ±5.88% (20 runs sampled)
-snappyjs#compress x 1.78 ops/sec ±1.57% (9 runs sampled)
-node-snappy#uncompress x 14.16 ops/sec ±6.89% (38 runs sampled)
-snappyjs#uncompress x 5.71 ops/sec ±3.88% (18 runs sampled)
+Random string (length 1000000, byte length 1500098), repeated 50 times:
+node-snappy#compress x 6.69 ops/sec ±5.23% (21 runs sampled)
+snappyjs#compress x 2.39 ops/sec ±2.54% (10 runs sampled)
+node-snappy#uncompress x 14.94 ops/sec ±6.90% (40 runs sampled)
+snappyjs#uncompress x 5.92 ops/sec ±4.28% (19 runs sampled)
 
-Random string (length 100, byte length 152), repeated 100000 times:
-node-snappy#compress x 3.91 ops/sec ±3.99% (14 runs sampled)
-snappyjs#compress x 2.96 ops/sec ±1.70% (12 runs sampled)
-node-snappy#uncompress x 4.24 ops/sec ±4.77% (15 runs sampled)
-snappyjs#uncompress x 12.95 ops/sec ±2.03% (36 runs sampled)
+Random string (length 100, byte length 147), repeated 100000 times:
+node-snappy#compress x 4.17 ops/sec ±2.96% (15 runs sampled)
+snappyjs#compress x 5.45 ops/sec ±1.51% (18 runs sampled)
+node-snappy#uncompress x 4.39 ops/sec ±3.83% (15 runs sampled)
+snappyjs#uncompress x 14.01 ops/sec ±2.06% (38 runs sampled)
 ~~~
 
 From the result, we see that SnappyJS has 35%~40% performance of native implementation on uncompression,
 and 25%~40% performance on compression.
 If input size is small, SnappyJS may have better performance than `node-snappy`.
-It is because calling native function in JS is much more expensive than calling a JS function.
+It is because calling native function in JS is much more expensive than calling JS function.
 
 ## License
 
