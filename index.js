@@ -22,33 +22,84 @@
 
 'use strict'
 
+function isNode () {
+  if (typeof process === 'object') {
+    if (typeof process.versions === 'object') {
+      if (typeof process.versions.node !== 'undefined') {
+        return true
+      }
+    }
+  }
+  return false
+}
+
+var is_node = isNode()
+
+function isArrayBuffer (object) {
+  return object instanceof ArrayBuffer
+}
+
+function isBuffer (object) {
+  if (!is_node) {
+    return false
+  }
+  return Buffer.isBuffer(object)
+}
+
 var SnappyDecompressor = require('./snappy_decompressor').SnappyDecompressor
 var SnappyCompressor = require('./snappy_compressor').SnappyCompressor
 
 function uncompress (compressed) {
-  if (!(compressed instanceof ArrayBuffer)) {
-    throw new TypeError('compressed must be type of ArrayBuffer')
+  if (!isArrayBuffer(compressed) && !isBuffer(compressed)) {
+    throw new TypeError('Argument compressed must be type of ArrayBuffer or Buffer')
+  }
+  var array_buffer_mode = false
+  if (isArrayBuffer(compressed)) {
+    array_buffer_mode = true
+    compressed = new Uint8Array(compressed)
   }
   var decompressor = new SnappyDecompressor(compressed)
   var length = decompressor.readUncompressedLength()
   if (length === -1) {
     throw new Error('Invalid Snappy bitstream')
   }
-  var uncompressed = new ArrayBuffer(length)
-  if (!decompressor.uncompressToBuffer(uncompressed)) {
-    throw new Error('Invalid Snappy bitstream')
+  var uncompressed, uncompressed_view
+  if (array_buffer_mode) {
+    uncompressed = new ArrayBuffer(length)
+    uncompressed_view = new Uint8Array(uncompressed)
+    if (!decompressor.uncompressToBuffer(uncompressed_view)) {
+      throw new Error('Invalid Snappy bitstream')
+    }
+  } else {
+    uncompressed = new Buffer(length)
+    if (!decompressor.uncompressToBuffer(uncompressed)) {
+      throw new Error('Invalid Snappy bitstream')
+    }
   }
   return uncompressed
 }
 
 function compress (uncompressed) {
-  if (!(uncompressed instanceof ArrayBuffer)) {
-    throw new TypeError('uncompressed must be type of ArrayBuffer')
+  if (!isArrayBuffer(uncompressed) && !isBuffer(uncompressed)) {
+    throw new TypeError('Argument uncompressed must be type of ArrayBuffer or Buffer')
+  }
+  var array_buffer_mode = false
+  if (isArrayBuffer(uncompressed)) {
+    array_buffer_mode = true
+    uncompressed = new Uint8Array(uncompressed)
   }
   var compressor = new SnappyCompressor(uncompressed)
   var max_length = compressor.maxCompressedLength()
-  var compressed = new ArrayBuffer(max_length)
-  var length = compressor.compressToBuffer(compressed)
+  var compressed, compressed_view
+  var length
+  if (array_buffer_mode) {
+    compressed = new ArrayBuffer(max_length)
+    compressed_view = new Uint8Array(compressed)
+    length = compressor.compressToBuffer(compressed_view)
+  } else {
+    compressed = new Buffer(max_length)
+    length = compressor.compressToBuffer(compressed)
+  }
   return compressed.slice(0, length)
 }
 

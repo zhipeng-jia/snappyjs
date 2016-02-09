@@ -196,7 +196,7 @@ function putVarint (value, output, op) {
 }
 
 function SnappyCompressor (uncompressed) {
-  this.array = new Uint8Array(uncompressed)
+  this.array = uncompressed
   this.hash_table = new Uint16Array(HASH_TABLE_SIZE)
 }
 
@@ -209,17 +209,15 @@ SnappyCompressor.prototype.compressToBuffer = function (out_buffer) {
   var array = this.array
   var length = array.length
   var pos = 0
-
-  var out_array = new Uint8Array(out_buffer)
   var out_pos = 0
 
   var hash_table = this.hash_table
   var fragment_size
 
-  out_pos = putVarint(length, out_array, out_pos)
+  out_pos = putVarint(length, out_buffer, out_pos)
   while (pos < length) {
     fragment_size = Math.min(length - pos, BLOCK_SIZE)
-    out_pos = compressFragment(array, pos, fragment_size, out_array, out_pos, hash_table)
+    out_pos = compressFragment(array, pos, fragment_size, out_buffer, out_pos, hash_table)
     pos += fragment_size
   }
 

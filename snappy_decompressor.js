@@ -39,7 +39,7 @@ function selfCopyBytes (array, pos, offset, length) {
 }
 
 function SnappyDecompressor (compressed) {
-  this.array = new Uint8Array(compressed)
+  this.array = compressed
   this.pos = 0
 }
 
@@ -67,8 +67,6 @@ SnappyDecompressor.prototype.uncompressToBuffer = function (out_buffer) {
   var array = this.array
   var array_length = array.length
   var pos = this.pos
-
-  var out_array = new Uint8Array(out_buffer)
   var out_pos = 0
 
   var c, len, small_len
@@ -92,7 +90,7 @@ SnappyDecompressor.prototype.uncompressToBuffer = function (out_buffer) {
       if (pos + len > array_length) {
         return false
       }
-      copyBytes(array, pos, out_array, out_pos, len)
+      copyBytes(array, pos, out_buffer, out_pos, len)
       pos += len
       out_pos += len
     } else {
@@ -124,7 +122,7 @@ SnappyDecompressor.prototype.uncompressToBuffer = function (out_buffer) {
       if (offset === 0 || offset > out_pos) {
         return false
       }
-      selfCopyBytes(out_array, out_pos, offset, len)
+      selfCopyBytes(out_buffer, out_pos, offset, len)
       out_pos += len
     }
   }
