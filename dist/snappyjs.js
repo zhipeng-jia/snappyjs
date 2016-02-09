@@ -5,7 +5,7 @@
  * snappyjs:
  *   license: MIT
  *   author: Zhipeng Jia
- *   version: 0.3.1
+ *   version: 0.4.0
  * 
  * base64-js:
  *   license: MIT
@@ -1977,14 +1977,11 @@ process.umask = function() { return 0; };
 var BLOCK_LOG = 16
 var BLOCK_SIZE = 1 << BLOCK_LOG
 
-var HASH_TABLE_BITS = 14
-var HASH_TABLE_SIZE = 1 << HASH_TABLE_BITS
+var MAX_HASH_TABLE_BITS = 14
+var global_hash_tables = new Array(MAX_HASH_TABLE_BITS + 1)
 
-var HASH_FUNC_SHIFT = 32 - HASH_TABLE_BITS
-
-function hashFunc (key) {
-  var h = key * 0x1e35a7bd
-  return h >>> HASH_FUNC_SHIFT
+function hashFunc (key, hash_func_shift) {
+  return (key * 0x1e35a7bd) >>> hash_func_shift
 }
 
 function load32 (array, pos) {
@@ -2048,7 +2045,19 @@ function emitCopy (output, op, offset, len) {
   return emitCopyLessThan64(output, op, offset, len)
 }
 
-function compressFragment (input, ip, input_size, output, op, hash_table) {
+function compressFragment (input, ip, input_size, output, op) {
+  var hash_table_bits = 1
+  while ((1 << hash_table_bits) <= input_size &&
+         hash_table_bits <= MAX_HASH_TABLE_BITS) {
+    hash_table_bits += 1
+  }
+  hash_table_bits -= 1
+  var hash_func_shift = 32 - hash_table_bits
+
+  if (typeof global_hash_tables[hash_table_bits] === 'undefined') {
+    global_hash_tables[hash_table_bits] = new Uint16Array(1 << hash_table_bits)
+  }
+  var hash_table = global_hash_tables[hash_table_bits]
   var i
   for (i = 0; i < hash_table.length; i++) {
     hash_table[i] = 0
@@ -2071,7 +2080,7 @@ function compressFragment (input, ip, input_size, output, op, hash_table) {
     ip_limit = ip_end - INPUT_MARGIN
 
     ip += 1
-    next_hash = hashFunc(load32(input, ip))
+    next_hash = hashFunc(load32(input, ip), hash_func_shift)
 
     while (flag) {
       skip = 32
@@ -2086,7 +2095,7 @@ function compressFragment (input, ip, input_size, output, op, hash_table) {
           flag = false
           break
         }
-        next_hash = hashFunc(load32(input, next_ip))
+        next_hash = hashFunc(load32(input, next_ip), hash_func_shift)
         candidate = base_ip + hash_table[hash]
         hash_table[hash] = ip - base_ip
       } while (!equals32(input, ip, candidate))
@@ -2112,9 +2121,9 @@ function compressFragment (input, ip, input_size, output, op, hash_table) {
           flag = false
           break
         }
-        prev_hash = hashFunc(load32(input, ip - 1))
+        prev_hash = hashFunc(load32(input, ip - 1), hash_func_shift)
         hash_table[prev_hash] = ip - 1 - base_ip
-        cur_hash = hashFunc(load32(input, ip))
+        cur_hash = hashFunc(load32(input, ip), hash_func_shift)
         candidate = base_ip + hash_table[cur_hash]
         hash_table[cur_hash] = ip - base_ip
       } while (equals32(input, ip, candidate))
@@ -2124,7 +2133,7 @@ function compressFragment (input, ip, input_size, output, op, hash_table) {
       }
 
       ip += 1
-      next_hash = hashFunc(load32(input, ip))
+      next_hash = hashFunc(load32(input, ip), hash_func_shift)
     }
   }
 
@@ -2149,7 +2158,6 @@ function putVarint (value, output, op) {
 
 function SnappyCompressor (uncompressed) {
   this.array = uncompressed
-  this.hash_table = new Uint16Array(HASH_TABLE_SIZE)
 }
 
 SnappyCompressor.prototype.maxCompressedLength = function () {
@@ -2163,13 +2171,12 @@ SnappyCompressor.prototype.compressToBuffer = function (out_buffer) {
   var pos = 0
   var out_pos = 0
 
-  var hash_table = this.hash_table
   var fragment_size
 
   out_pos = putVarint(length, out_buffer, out_pos)
   while (pos < length) {
     fragment_size = Math.min(length - pos, BLOCK_SIZE)
-    out_pos = compressFragment(array, pos, fragment_size, out_buffer, out_pos, hash_table)
+    out_pos = compressFragment(array, pos, fragment_size, out_buffer, out_pos)
     pos += fragment_size
   }
 
