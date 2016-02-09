@@ -22,16 +22,6 @@
 
 'use strict'
 
-function stringToArrayBuffer (source) {
-  var array_buffer = new ArrayBuffer(source.length * 2)
-  var view = new Uint16Array(array_buffer)
-  var i
-  for (i = 0; i < source.length; i++) {
-    view[i] = source.charCodeAt(i)
-  }
-  return array_buffer
-}
-
 var file_input = document.getElementById('input')
 var output = document.getElementById('output')
 
@@ -40,20 +30,19 @@ file_input.addEventListener('change', function (e) {
   var file = file_input.files[0]
   var reader = new FileReader()
   reader.onload = function (e) {
-    var text = reader.result
-    var text_buffer = stringToArrayBuffer(text)
-    output.innerHTML += 'Original byte size: ' + text_buffer.byteLength + '<br>'
-    var compressed = SnappyJS.compress(text_buffer)
+    var content_buffer = reader.result
+    output.innerHTML += 'Original byte size: ' + content_buffer.byteLength + '<br>'
+    var compressed = SnappyJS.compress(content_buffer)
     output.innerHTML += 'Compressed byte size: ' + compressed.byteLength + '<br>'
 
     var suite = new Benchmark.Suite()
     suite.add('SnappyJS#compress', function () {
-      SnappyJS.compress(text_buffer)
+      SnappyJS.compress(content_buffer)
     }).add('SnappyJS#uncompress', function () {
       SnappyJS.uncompress(compressed)
     }).on('cycle', function (event) {
       output.innerHTML += String(event.target) + '<br>'
     }).run()
   }
-  reader.readAsText(file)
+  reader.readAsArrayBuffer(file)
 })

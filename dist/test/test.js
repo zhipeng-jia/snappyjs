@@ -22,24 +22,19 @@
 
 'use strict'
 
-function stringToArrayBuffer (source) {
-  var array_buffer = new ArrayBuffer(source.length * 2)
-  var view = new Uint16Array(array_buffer)
-  var i
-  for (i = 0; i < source.length; i++) {
-    view[i] = source.charCodeAt(i)
+function arrayBufferEquals(buffer1, buffer2) {
+  if (buffer1.byteLength !== buffer2.byteLength) {
+    return false
   }
-  return array_buffer
-}
-
-function arrayBufferToString (array_buffer) {
-  var result = ''
-  var view = new Uint16Array(array_buffer)
+  var view1 = new Uint8Array(buffer1)
+  var view2 = new Uint8Array(buffer1)
   var i
-  for (i = 0; i < view.length; i++) {
-    result += String.fromCharCode(view[i])
+  for (i = 0; i < view1.length; i++) {
+    if (view1[i] !== view2[i]) {
+      return false
+    }
   }
-  return result
+  return true
 }
 
 var file_input = document.getElementById('input')
@@ -49,17 +44,15 @@ file_input.addEventListener('change', function (e) {
   var file = file_input.files[0]
   var reader = new FileReader()
   reader.onload = function (e) {
-    var text = reader.result
-    var text_buffer = stringToArrayBuffer(text)
-    var compressed = SnappyJS.compress(text_buffer)
+    var content_buffer = reader.result
+    var compressed = SnappyJS.compress(content_buffer)
     var uncompressed = SnappyJS.uncompress(compressed)
-    var uncompressed_string = arrayBufferToString(uncompressed)
-    if (uncompressed_string === text) {
-      output.innerHTML = 'Original byte size: ' + text_buffer.byteLength + '<br>' +
+    if (arrayBufferEquals(uncompressed, content_buffer)) {
+      output.innerHTML = 'Original byte size: ' + content_buffer.byteLength + '<br>' +
                          'Compressed byte size: ' + compressed.byteLength
     } else {
       window.alert('Test failed!')
     }
   }
-  reader.readAsText(file)
+  reader.readAsArrayBuffer(file)
 })
