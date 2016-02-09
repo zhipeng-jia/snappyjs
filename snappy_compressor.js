@@ -26,9 +26,7 @@ var BLOCK_LOG = 16
 var BLOCK_SIZE = 1 << BLOCK_LOG
 
 var MAX_HASH_TABLE_BITS = 14
-var GLOBAL_HASH_TABLE_SIZE = 1 << MAX_HASH_TABLE_BITS
-
-var global_hash_table = new Uint16Array(GLOBAL_HASH_TABLE_SIZE)
+var global_hash_tables = new Array(MAX_HASH_TABLE_BITS + 1)
 
 function hashFunc (key, hash_func_shift) {
   return (key * 0x1e35a7bd) >>> hash_func_shift
@@ -104,12 +102,10 @@ function compressFragment (input, ip, input_size, output, op) {
   hash_table_bits -= 1
   var hash_func_shift = 32 - hash_table_bits
 
-  var hash_table
-  if (hash_table_bits === MAX_HASH_TABLE_BITS) {
-    hash_table = global_hash_table
-  } else {
-    hash_table = new Uint16Array(1 << hash_table_bits)
+  if (typeof global_hash_tables[hash_table_bits] === 'undefined') {
+    global_hash_tables[hash_table_bits] = new Uint16Array(1 << hash_table_bits)
   }
+  var hash_table = global_hash_tables[hash_table_bits]
   var i
   for (i = 0; i < hash_table.length; i++) {
     hash_table[i] = 0
