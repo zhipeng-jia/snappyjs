@@ -33,12 +33,12 @@ SnappyJS relies on `ArrayBuffer`. All major browsers support it now ([http://can
 
 ### SnappyJS.compress(input)
 
-Compress `input`, which must be type of `ArrayBuffer` or `Buffer`.
+Compress `input`, which must be type of `ArrayBuffer`, `Buffer`, or `Uint8Array`.
 Compressed byte stream is returned, with same type of `input`.
 
 ### SnappyJS.uncompress(compressed)
 
-Uncompress `compressed`, which must be type of `ArrayBuffer` or `Buffer`.
+Uncompress `compressed`, which must be type of `ArrayBuffer`, `Buffer`, or `Uint8Array`.
 Uncompressed byte stream is returned, with same type of `compressed`.
 
 ## Benchmark
