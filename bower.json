@@ -1,7 +1,7 @@
 {
   "name": "snappyjs",
   "main": "./dist/snappyjs.js",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "homepage": "https://github.com/zhipeng-jia/snappyjs",
   "authors": [
     "Zhipeng Jia <zhipeng.jia@outlook.com>"
