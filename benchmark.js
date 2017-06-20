@@ -121,7 +121,7 @@ function runBenchmark () {
 }
 
 Promise.coroutine(function * () {
-  text1 = yield rp('http://msxnet.org/orwell/print/1984.tex')
+  text1 = yield rp('https://raw.githubusercontent.com/idc9/stor390/master/notes/natural_language_processing/orwell_novels/1984.txt')
   text2 = yield rp('http://www.ecma-international.org/ecma-262/6.0/')
 })().then(function () {
   runBenchmark()
