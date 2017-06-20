@@ -22,22 +22,22 @@
 
 'use strict'
 
-var file_input = document.getElementById('input')
+var fileInput = document.getElementById('input')
 var output = document.getElementById('output')
 
-file_input.addEventListener('change', function (e) {
+fileInput.addEventListener('change', function (e) {
   output.innerHTML = ''
-  var file = file_input.files[0]
+  var file = fileInput.files[0]
   var reader = new FileReader()
   reader.onload = function (e) {
-    var content_buffer = reader.result
-    output.innerHTML += 'Original byte size: ' + content_buffer.byteLength + '<br>'
-    var compressed = SnappyJS.compress(content_buffer)
+    var contentBuffer = reader.result
+    output.innerHTML += 'Original byte size: ' + contentBuffer.byteLength + '<br>'
+    var compressed = SnappyJS.compress(contentBuffer)
     output.innerHTML += 'Compressed byte size: ' + compressed.byteLength + '<br>'
 
     var suite = new Benchmark.Suite()
     suite.add('SnappyJS#compress', function () {
-      SnappyJS.compress(content_buffer)
+      SnappyJS.compress(contentBuffer)
     }).add('SnappyJS#uncompress', function () {
       SnappyJS.uncompress(compressed)
     }).on('cycle', function (event) {

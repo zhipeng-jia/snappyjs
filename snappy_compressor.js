@@ -26,10 +26,10 @@ var BLOCK_LOG = 16
 var BLOCK_SIZE = 1 << BLOCK_LOG
 
 var MAX_HASH_TABLE_BITS = 14
-var global_hash_tables = new Array(MAX_HASH_TABLE_BITS + 1)
+var globalHashTables = new Array(MAX_HASH_TABLE_BITS + 1)
 
-function hashFunc (key, hash_func_shift) {
-  return (key * 0x1e35a7bd) >>> hash_func_shift
+function hashFunc (key, hashFuncShift) {
+  return (key * 0x1e35a7bd) >>> hashFuncShift
 }
 
 function load32 (array, pos) {
@@ -43,10 +43,10 @@ function equals32 (array, pos1, pos2) {
          array[pos1 + 3] === array[pos2 + 3]
 }
 
-function copyBytes (from_array, from_pos, to_array, to_pos, length) {
+function copyBytes (fromArray, fromPos, toArray, toPos, length) {
   var i
   for (i = 0; i < length; i++) {
-    to_array[to_pos + i] = from_array[from_pos + i]
+    toArray[toPos + i] = fromArray[fromPos + i]
   }
 }
 
@@ -93,87 +93,87 @@ function emitCopy (output, op, offset, len) {
   return emitCopyLessThan64(output, op, offset, len)
 }
 
-function compressFragment (input, ip, input_size, output, op) {
-  var hash_table_bits = 1
-  while ((1 << hash_table_bits) <= input_size &&
-         hash_table_bits <= MAX_HASH_TABLE_BITS) {
-    hash_table_bits += 1
+function compressFragment (input, ip, inputSize, output, op) {
+  var hashTableBits = 1
+  while ((1 << hashTableBits) <= inputSize &&
+         hashTableBits <= MAX_HASH_TABLE_BITS) {
+    hashTableBits += 1
   }
-  hash_table_bits -= 1
-  var hash_func_shift = 32 - hash_table_bits
+  hashTableBits -= 1
+  var hashFuncShift = 32 - hashTableBits
 
-  if (typeof global_hash_tables[hash_table_bits] === 'undefined') {
-    global_hash_tables[hash_table_bits] = new Uint16Array(1 << hash_table_bits)
+  if (typeof globalHashTables[hashTableBits] === 'undefined') {
+    globalHashTables[hashTableBits] = new Uint16Array(1 << hashTableBits)
   }
-  var hash_table = global_hash_tables[hash_table_bits]
+  var hashTable = globalHashTables[hashTableBits]
   var i
-  for (i = 0; i < hash_table.length; i++) {
-    hash_table[i] = 0
+  for (i = 0; i < hashTable.length; i++) {
+    hashTable[i] = 0
   }
 
-  var ip_end = ip + input_size
-  var ip_limit
-  var base_ip = ip
-  var next_emit = ip
+  var ipEnd = ip + inputSize
+  var ipLimit
+  var baseIp = ip
+  var nextEmit = ip
 
-  var hash, next_hash
-  var next_ip, candidate, skip
-  var bytes_between_hash_lookups
+  var hash, nextHash
+  var nextIp, candidate, skip
+  var bytesBetweenHashLookups
   var base, matched, offset
-  var prev_hash, cur_hash
+  var prevHash, curHash
   var flag = true
 
   var INPUT_MARGIN = 15
-  if (input_size >= INPUT_MARGIN) {
-    ip_limit = ip_end - INPUT_MARGIN
+  if (inputSize >= INPUT_MARGIN) {
+    ipLimit = ipEnd - INPUT_MARGIN
 
     ip += 1
-    next_hash = hashFunc(load32(input, ip), hash_func_shift)
+    nextHash = hashFunc(load32(input, ip), hashFuncShift)
 
     while (flag) {
       skip = 32
-      next_ip = ip
+      nextIp = ip
       do {
-        ip = next_ip
-        hash = next_hash
-        bytes_between_hash_lookups = skip >>> 5
+        ip = nextIp
+        hash = nextHash
+        bytesBetweenHashLookups = skip >>> 5
         skip += 1
-        next_ip = ip + bytes_between_hash_lookups
-        if (ip > ip_limit) {
+        nextIp = ip + bytesBetweenHashLookups
+        if (ip > ipLimit) {
           flag = false
           break
         }
-        next_hash = hashFunc(load32(input, next_ip), hash_func_shift)
-        candidate = base_ip + hash_table[hash]
-        hash_table[hash] = ip - base_ip
+        nextHash = hashFunc(load32(input, nextIp), hashFuncShift)
+        candidate = baseIp + hashTable[hash]
+        hashTable[hash] = ip - baseIp
       } while (!equals32(input, ip, candidate))
 
       if (!flag) {
         break
       }
 
-      op = emitLiteral(input, next_emit, ip - next_emit, output, op)
+      op = emitLiteral(input, nextEmit, ip - nextEmit, output, op)
 
       do {
         base = ip
         matched = 4
-        while (ip + matched < ip_end && input[ip + matched] === input[candidate + matched]) {
+        while (ip + matched < ipEnd && input[ip + matched] === input[candidate + matched]) {
           matched += 1
         }
         ip += matched
         offset = base - candidate
         op = emitCopy(output, op, offset, matched)
 
-        next_emit = ip
-        if (ip >= ip_limit) {
+        nextEmit = ip
+        if (ip >= ipLimit) {
           flag = false
           break
         }
-        prev_hash = hashFunc(load32(input, ip - 1), hash_func_shift)
-        hash_table[prev_hash] = ip - 1 - base_ip
-        cur_hash = hashFunc(load32(input, ip), hash_func_shift)
-        candidate = base_ip + hash_table[cur_hash]
-        hash_table[cur_hash] = ip - base_ip
+        prevHash = hashFunc(load32(input, ip - 1), hashFuncShift)
+        hashTable[prevHash] = ip - 1 - baseIp
+        curHash = hashFunc(load32(input, ip), hashFuncShift)
+        candidate = baseIp + hashTable[curHash]
+        hashTable[curHash] = ip - baseIp
       } while (equals32(input, ip, candidate))
 
       if (!flag) {
@@ -181,12 +181,12 @@ function compressFragment (input, ip, input_size, output, op) {
       }
 
       ip += 1
-      next_hash = hashFunc(load32(input, ip), hash_func_shift)
+      nextHash = hashFunc(load32(input, ip), hashFuncShift)
     }
   }
 
-  if (next_emit < ip_end) {
-    op = emitLiteral(input, next_emit, ip_end - next_emit, output, op)
+  if (nextEmit < ipEnd) {
+    op = emitLiteral(input, nextEmit, ipEnd - nextEmit, output, op)
   }
 
   return op
@@ -209,26 +209,26 @@ function SnappyCompressor (uncompressed) {
 }
 
 SnappyCompressor.prototype.maxCompressedLength = function () {
-  var source_len = this.array.length
-  return 32 + source_len + Math.floor(source_len / 6)
+  var sourceLen = this.array.length
+  return 32 + sourceLen + Math.floor(sourceLen / 6)
 }
 
-SnappyCompressor.prototype.compressToBuffer = function (out_buffer) {
+SnappyCompressor.prototype.compressToBuffer = function (outBuffer) {
   var array = this.array
   var length = array.length
   var pos = 0
-  var out_pos = 0
+  var outPos = 0
 
-  var fragment_size
+  var fragmentSize
 
-  out_pos = putVarint(length, out_buffer, out_pos)
+  outPos = putVarint(length, outBuffer, outPos)
   while (pos < length) {
-    fragment_size = Math.min(length - pos, BLOCK_SIZE)
-    out_pos = compressFragment(array, pos, fragment_size, out_buffer, out_pos)
-    pos += fragment_size
+    fragmentSize = Math.min(length - pos, BLOCK_SIZE)
+    outPos = compressFragment(array, pos, fragmentSize, outBuffer, outPos)
+    pos += fragmentSize
   }
 
-  return out_pos
+  return outPos
 }
 
 exports.SnappyCompressor = SnappyCompressor

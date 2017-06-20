@@ -39,10 +39,10 @@ function randomString (length) {
 }
 
 function prepareData (target, text) {
-  var uncompressed_buffer = new Buffer(text)
-  var compressed_buffer = snappy.compressSync(uncompressed_buffer)
-  target.uncompressedBuffer = uncompressed_buffer
-  target.compressedBuffer = compressed_buffer
+  var uncompressedBuffer = Buffer.alloc(text)
+  var compressedBuffer = snappy.compressSync(uncompressedBuffer)
+  target.uncompressedBuffer = uncompressedBuffer
+  target.compressedBuffer = compressedBuffer
 }
 
 var text1, text2

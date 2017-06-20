@@ -24,10 +24,10 @@
 
 var WORD_MASK = [0, 0xff, 0xffff, 0xffffff, 0xffffffff]
 
-function copyBytes (from_array, from_pos, to_array, to_pos, length) {
+function copyBytes (fromArray, fromPos, toArray, toPos, length) {
   var i
   for (i = 0; i < length; i++) {
-    to_array[to_pos + i] = from_array[from_pos + i]
+    toArray[toPos + i] = fromArray[fromPos + i]
   }
 }
 
@@ -63,13 +63,13 @@ SnappyDecompressor.prototype.readUncompressedLength = function () {
   return -1
 }
 
-SnappyDecompressor.prototype.uncompressToBuffer = function (out_buffer) {
+SnappyDecompressor.prototype.uncompressToBuffer = function (outBuffer) {
   var array = this.array
-  var array_length = array.length
+  var arrayLength = array.length
   var pos = this.pos
-  var out_pos = 0
+  var outPos = 0
 
-  var c, len, small_len
+  var c, len, smallLen
   var offset
 
   while (pos < array.length) {
@@ -79,20 +79,20 @@ SnappyDecompressor.prototype.uncompressToBuffer = function (out_buffer) {
       // Literal
       len = (c >>> 2) + 1
       if (len > 60) {
-        if (pos + 3 >= array_length) {
+        if (pos + 3 >= arrayLength) {
           return false
         }
-        small_len = len - 60
+        smallLen = len - 60
         len = array[pos] + (array[pos + 1] << 8) + (array[pos + 2] << 16) + (array[pos + 3] << 24)
-        len = (len & WORD_MASK[small_len]) + 1
-        pos += small_len
+        len = (len & WORD_MASK[smallLen]) + 1
+        pos += smallLen
       }
-      if (pos + len > array_length) {
+      if (pos + len > arrayLength) {
         return false
       }
-      copyBytes(array, pos, out_buffer, out_pos, len)
+      copyBytes(array, pos, outBuffer, outPos, len)
       pos += len
-      out_pos += len
+      outPos += len
     } else {
       switch (c & 0x3) {
         case 1:
@@ -101,7 +101,7 @@ SnappyDecompressor.prototype.uncompressToBuffer = function (out_buffer) {
           pos += 1
           break
         case 2:
-          if (pos + 1 >= array_length) {
+          if (pos + 1 >= arrayLength) {
             return false
           }
           len = (c >>> 2) + 1
@@ -109,7 +109,7 @@ SnappyDecompressor.prototype.uncompressToBuffer = function (out_buffer) {
           pos += 2
           break
         case 3:
-          if (pos + 3 >= array_length) {
+          if (pos + 3 >= arrayLength) {
             return false
           }
           len = (c >>> 2) + 1
@@ -119,11 +119,11 @@ SnappyDecompressor.prototype.uncompressToBuffer = function (out_buffer) {
         default:
           break
       }
-      if (offset === 0 || offset > out_pos) {
+      if (offset === 0 || offset > outPos) {
         return false
       }
-      selfCopyBytes(out_buffer, out_pos, offset, len)
-      out_pos += len
+      selfCopyBytes(outBuffer, outPos, offset, len)
+      outPos += len
     }
   }
   return true

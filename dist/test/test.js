@@ -37,18 +37,18 @@ function arrayBufferEquals (buffer1, buffer2) {
   return true
 }
 
-var file_input = document.getElementById('input')
+var fileInput = document.getElementById('input')
 var output = document.getElementById('output')
 
-file_input.addEventListener('change', function (e) {
-  var file = file_input.files[0]
+fileInput.addEventListener('change', function (e) {
+  var file = fileInput.files[0]
   var reader = new FileReader()
   reader.onload = function (e) {
-    var content_buffer = reader.result
-    var compressed = SnappyJS.compress(content_buffer)
+    var contentBuffer = reader.result
+    var compressed = SnappyJS.compress(contentBuffer)
     var uncompressed = SnappyJS.uncompress(compressed)
-    if (arrayBufferEquals(uncompressed, content_buffer)) {
-      output.innerHTML = 'Original byte size: ' + content_buffer.byteLength + '<br>' +
+    if (arrayBufferEquals(uncompressed, contentBuffer)) {
+      output.innerHTML = 'Original byte size: ' + contentBuffer.byteLength + '<br>' +
                          'Compressed byte size: ' + compressed.byteLength
     } else {
       window.alert('Test failed!')
