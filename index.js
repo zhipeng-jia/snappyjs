@@ -99,7 +99,7 @@ function compress (uncompressed) {
   }
   var uint8_mode = false
   var array_buffer_mode = false
-  if (isUint8Array(compressed)) {
+  if (isUint8Array(uncompressed)) {
     uint8_mode = true
   } else if (isArrayBuffer(uncompressed)) {
     array_buffer_mode = true
