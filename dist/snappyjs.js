@@ -123,7 +123,7 @@ function uncompress (compressed) {
       throw new Error('Invalid Snappy bitstream')
     }
   } else {
-    uncompressed = new Buffer(length)
+    uncompressed = Buffer.alloc(length)
     if (!decompressor.uncompressToBuffer(uncompressed)) {
       throw new Error('Invalid Snappy bitstream')
     }
@@ -155,7 +155,7 @@ function compress (uncompressed) {
     compressedView = new Uint8Array(compressed)
     length = compressor.compressToBuffer(compressedView)
   } else {
-    compressed = new Buffer(maxLength)
+    compressed = Buffer.alloc(maxLength)
     length = compressor.compressToBuffer(compressed)
   }
   return compressed.slice(0, length)
