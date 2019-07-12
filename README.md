@@ -34,7 +34,7 @@ You can also use SnappyJS in browser. Adding `dist/snappyjs.js` or `dist/snappyj
 
 SnappyJS relies on `ArrayBuffer`. All major browsers support it now ([http://caniuse.com/#feat=typedarrays](http://caniuse.com/#feat=typedarrays)). Also, as I tested, SnappyJS has high performance on latest version of Google Chrome, Safari, Firefox, and Microsoft Edge.
 
-**When using webpack to build your project**, and you plan to only use `ArrayBuffer` or `Uint8Array` as input parameters, make sure to pass the following config to prevent webpack from automatically bundling a `Buffer` polyfill:
+**When using webpack to build your project**, and you plan to only use `ArrayBuffer` or `Uint8Array` as input parameters, make sure to put the following in your webpack config to prevent it from automatically bundling a `Buffer` polyfill:
 
 ```js
   node: {
