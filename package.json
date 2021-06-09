@@ -9,7 +9,6 @@
   },
   "author": "Zhipeng Jia",
   "license": "MIT",
-  "dependencies": {},
   "devDependencies": {
     "benchmark": "~2.1.4",
     "bluebird": "~3.5.0",
@@ -19,8 +18,8 @@
     "request-promise": "~4.2.1",
     "snappy": "~6.3.5",
     "standard": "~10.0.2",
-    "tap": "~10.5.1",
-    "uglifyify": "~4.0.1"
+    "tap": "^15.0.9",
+    "uglifyify": "^5.0.2"
   },
   "keywords": [
     "snappy"
