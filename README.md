@@ -1,4 +1,4 @@
-# SnappyJS [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+# SnappyJS [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/) ![Node.js CI](https://github.com/zhipeng-jia/snappyjs/actions/workflows/test.yml/badge.svg)
 A pure JavaScript implementation of Google's [Snappy](https://github.com/google/snappy) compression library.
 
 This implementation is reasonably fast (see benchmark below). It takes advantage of `ArrayBuffer`.
