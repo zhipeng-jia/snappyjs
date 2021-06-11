@@ -119,13 +119,13 @@ function compress (uncompressed) {
     length = compressor.compressToBuffer(compressed)
   }
   if (!compressed.slice) { // ie11
-    var compressedArray = new Uint8Array(Array.prototype.slice.call(compressed, 0, length));
+    var compressedArray = new Uint8Array(Array.prototype.slice.call(compressed, 0, length))
     if (uint8Mode) {
-      return compressedArray;
+      return compressedArray
     } else if (arrayBufferMode) {
-      return compressedArray.buffer;
+      return compressedArray.buffer
     } else {
-      throw new Error("not implemented");
+      throw new Error('Not implemented')
     }
   }
 
