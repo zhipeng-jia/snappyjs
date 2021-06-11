@@ -1,4 +1,4 @@
-# SnappyJS [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/) [![Travis CI status](https://travis-ci.org/zhipeng-jia/snappyjs.svg?branch=master)](https://travis-ci.org/zhipeng-jia/snappyjs)
+# SnappyJS [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 A pure JavaScript implementation of Google's [Snappy](https://github.com/google/snappy) compression library.
 
 This implementation is reasonably fast (see benchmark below). It takes advantage of `ArrayBuffer`.
@@ -17,9 +17,9 @@ bower install snappyjs
 
 ## Usage
 
-### nodejs
+### Node.js
 
-SnappyJS works with Node.js 4.x or later.
+SnappyJS works with Node.js 10.x or later.
 ~~~javascript
 var SnappyJS = require('snappyjs')
 var buffer = new ArrayBuffer(100)
