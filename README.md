@@ -17,6 +17,8 @@ bower install snappyjs
 
 ## Usage
 
+### nodejs
+
 SnappyJS works with Node.js 4.x or later.
 ~~~javascript
 var SnappyJS = require('snappyjs')
@@ -26,8 +28,19 @@ var compressed = SnappyJS.compress(buffer)
 var uncompressed = SnappyJS.uncompress(compressed)
 ~~~
 
+### Browser
+
 You can also use SnappyJS in browser. Adding `dist/snappyjs.js` or `dist/snappyjs.min.js` will introduce `SnappyJS` in the global scope.
+
 SnappyJS relies on `ArrayBuffer`. All major browsers support it now ([http://caniuse.com/#feat=typedarrays](http://caniuse.com/#feat=typedarrays)). Also, as I tested, SnappyJS has high performance on latest version of Google Chrome, Safari, Firefox, and Microsoft Edge.
+
+**When using webpack to build your project**, and you plan to only use `ArrayBuffer` or `Uint8Array` as input parameters, make sure to put the following in your webpack config to prevent it from automatically bundling a `Buffer` polyfill:
+
+```js
+  node: {
+    Buffer: false,
+  }
+```
 
 ## API
 
