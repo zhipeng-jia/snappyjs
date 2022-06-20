@@ -53,7 +53,7 @@ var SnappyCompressor = require('./snappy_compressor').SnappyCompressor
 
 var TYPE_ERROR_MSG = 'Argument compressed must be type of ArrayBuffer, Buffer, or Uint8Array'
 
-function uncompress (compressed) {
+function uncompress (compressed, maxLength) {
   if (!isUint8Array(compressed) && !isArrayBuffer(compressed) && !isBuffer(compressed)) {
     throw new TypeError(TYPE_ERROR_MSG)
   }
@@ -69,6 +69,9 @@ function uncompress (compressed) {
   var length = decompressor.readUncompressedLength()
   if (length === -1) {
     throw new Error('Invalid Snappy bitstream')
+  }
+  if (length > maxLength) {
+    throw new Error(`The uncompressed length of ${length} is too big, expect at most ${maxLength}`)
   }
   var uncompressed, uncompressedView
   if (uint8Mode) {
