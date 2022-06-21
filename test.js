@@ -266,3 +266,13 @@ test('uncompress() random string of length 100000 using Buffer', function (t) {
   t.equal(uncompressedString, randomInputString)
   t.end()
 })
+
+test('uncompress() maxLength', function (t) {
+  var randomInputString = randomString(100000)
+  var compressed = snappy.compressSync(arrayBufferToBuffer(stringToArrayBuffer(randomInputString)))
+  t.equal(snappy.isValidCompressedSync(compressed), true)
+  compressed = bufferToUint8Array(compressed)
+  t.throws(function () { snappyjs.uncompress(compressed, 99999) }, new Error('The uncompressed length of 200000 is too big, expect at most 99999'))//
+
+  t.end()
+})
