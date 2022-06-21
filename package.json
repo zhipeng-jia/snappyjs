@@ -17,7 +17,7 @@
     "microtime": "~3.0.0",
     "request-promise": "~4.2.1",
     "snappy": "~6.3.5",
-    "standard": "~10.0.2",
+    "standard": "^17.0.0",
     "tap": "^15.0.9",
     "uglifyify": "^5.0.2"
   },
